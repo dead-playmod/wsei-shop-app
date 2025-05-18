@@ -1,15 +1,11 @@
-import { Image, StyleSheet, Platform, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ProductCard } from '@/components/ProductCard';
-import { useProductFetch } from '@/hooks/useProductFetch';
-import { useEffect } from 'react';
+import { useProductsFetch } from '@/hooks/useProductFetch';
 
 export default function HomeScreen() {
-  const { productResponse } = useProductFetch();
+  const { productResponse } = useProductsFetch();
 
   return (
     <ScrollView>

@@ -1,25 +1,48 @@
-import { Image, StyleSheet, View, ViewProps } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import { Product } from '@/types/product';
+import { useRouter } from 'expo-router';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 type Props = ViewProps & {
   product: Product;
 };
 
 export function ProductCard({ product, style, ...rest }: Props) {
+  const router = useRouter();
+  const backgroundColor = useThemeColor({}, 'backgroundMuted');
+
+  const onNavigate = () => {
+    router.push({
+      pathname: '/product/[productId]',
+      params: { productId: product.id.toString() },
+    });
+  };
+
   return (
-    <ThemedView style={[styles.container, style]} {...rest}>
-      <Image source={{ uri: product.thumbnail }} style={styles.image} />
+    <TouchableOpacity onPress={onNavigate}>
+      <ThemedView
+        style={[styles.container, { backgroundColor }, style]}
+        {...rest}
+      >
+        <Image source={{ uri: product.thumbnail }} style={styles.image} />
 
-      <View style={styles.info}>
-        <ThemedText>{product.title}</ThemedText>
+        <View style={styles.info}>
+          <ThemedText>{product.title}</ThemedText>
 
-        <ThemedText style={styles.price}>{product.price} 💵</ThemedText>
-      </View>
-    </ThemedView>
+          <ThemedText style={styles.price}>{product.price} 💵</ThemedText>
+        </View>
+      </ThemedView>
+    </TouchableOpacity>
   );
 }
 
@@ -31,7 +54,6 @@ const styles = StyleSheet.create({
     paddingBlock: 16,
     paddingInline: 20,
     borderRadius: 16,
-    backgroundColor: Colors.dark.backgroundMuted,
   },
   info: {
     flex: 1,

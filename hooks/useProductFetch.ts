@@ -1,32 +1,41 @@
-import { ProductResponse } from '@/types/product';
+import { Product, ProductResponse } from '@/types/product';
 import { api } from '@/utils/api';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-export function useProductFetch() {
-  const [productResponse, setProductResponse] = useState<ProductResponse>();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+export function useProductFetch(productId: string) {
+  const fetchProduct = async () => api<Product>(`/products/${productId}`);
 
-  const load = async () => {
-    try {
-      setLoading(true);
-      const response = await api<ProductResponse>('/products');
-      setProductResponse(response);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
+  const {
+    data: product,
+    isLoading: loading,
+    error,
+  } = useQuery<Product, Error>({
+    queryKey: ['product', productId],
+    queryFn: fetchProduct,
+  });
+
+  return {
+    product,
+    loading,
+    error,
   };
+}
 
-  useEffect(() => {
-    load();
-  }, []);
+export function useProductsFetch() {
+  const fetchProducts = async () => api<ProductResponse>('/products');
+
+  const {
+    data: productResponse,
+    isLoading: loading,
+    error,
+  } = useQuery<ProductResponse, Error>({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  });
 
   return {
     productResponse,
     loading,
     error,
-    load,
   };
 }
