@@ -44,12 +44,23 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="explore"
+        name="blog"
         options={{
-          title: 'Explore',
+          title: 'Blogs',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="text.page" color={color} />
           ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Cart',
+          href: user ? undefined : null,
+          tabBarIcon: ({ color }) => {
+            return <IconSymbol size={28} name="cart.fill" color={color} />;
+          },
         }}
       />
 

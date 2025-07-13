@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useCart } from '@/hooks/useCart';
 import { useProductFetch } from '@/hooks/useProductFetch';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
@@ -16,6 +17,8 @@ export default function ProductScreen() {
   const imgBackgroundColor = useThemeColor({}, 'backgroundMuted');
   const borderColor = useThemeColor({}, 'border');
   const tint = useThemeColor({}, 'tint');
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     navigation.setOptions({
@@ -37,10 +40,10 @@ export default function ProductScreen() {
           <ThemedText type="defaultSemiBold">{product?.price} 💵</ThemedText>
 
           <Button
-            title="Buy Now"
+            title="Add to Cart"
             color={tint}
             onPress={() => {
-              console.log('Buy Now');
+              product && addToCart(product);
             }}
           />
         </View>

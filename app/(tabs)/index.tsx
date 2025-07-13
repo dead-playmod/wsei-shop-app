@@ -3,9 +3,12 @@ import { StyleSheet, ScrollView } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ProductCard } from '@/components/ProductCard';
 import { useProductsFetch } from '@/hooks/useProductFetch';
+import { useState } from 'react';
+import Pagination from '@/components/Pagination';
 
 export default function HomeScreen() {
-  const { productResponse } = useProductsFetch();
+  const [skip, setSkip] = useState(0);
+  const { productResponse } = useProductsFetch(skip);
 
   return (
     <ScrollView>
@@ -13,6 +16,15 @@ export default function HomeScreen() {
         {productResponse?.products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
+
+        <Pagination
+          total={productResponse?.total || 0}
+          limit={productResponse?.limit || 0}
+          skip={skip}
+          onPageChange={(page) => {
+            setSkip(page);
+          }}
+        />
       </ThemedView>
     </ScrollView>
   );
